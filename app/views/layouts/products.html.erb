@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cash Register | Products</title>
+    <%= csrf_meta_tags %>
+    <%= javascript_pack_tag 'products-bundle' %>
+    <%= stylesheet_pack_tag 'products-bundle' %>
+  </head>
+
+  <body>
+    <%= react_component("Header", props: @products_props, prerender: false) %>
+    <%= yield %>
+  </body>
+</html>
