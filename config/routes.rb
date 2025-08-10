@@ -12,5 +12,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  resources :products, only: %i[index]
+  resources :products, only: %i[index], param: :code do
+    put :add_to_cart
+    put :remove_from_cart
+  end
+
+  get "/cart", to: "cart#show"
+
+  root to: 'products#index'
 end

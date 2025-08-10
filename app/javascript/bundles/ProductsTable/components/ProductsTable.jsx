@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -9,12 +9,55 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { v4 as uuidv4 } from 'uuid';
 
 const ProductsTable = (props) => {
   const { data: products } = props.products;
+  const [cart, setCart] = useState(props.cart);
+  const csrfToken = document.getElementsByName('csrf-token')[0].content;
+
+  const addToCart = async (code) => {
+    const response = await fetch(`/products/${code}/add_to_cart`, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRF-Token': csrfToken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    });
+
+    const response_json = await response.json();
+    setCart(response_json.cart);
+  };
+
+  const removeFromCart = async (code) => {
+    const response = await fetch(`/products/${code}/remove_from_cart`, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRF-Token': csrfToken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    });
+    
+    const response_json = await response.json();
+    setCart(response_json.cart);
+  };
+
+  const setProductQty = (event, code) => {
+    const quantity = event.target.value;
+
+    if (quantity > 1) {
+      addToCart(code);
+    } else {
+      removeFromCart(code);
+    }
+  };
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
@@ -38,7 +81,18 @@ const ProductsTable = (props) => {
                 <TableCell>{product.attributes.name}</TableCell>
                 <TableCell>{product.attributes.price}</TableCell>
                 <TableCell align="right">
-                  <Button variant="contained">Add</Button>
+                  {cart && cart[product.attributes.code] == null ? (
+                    <Button variant="contained" onClick={ () => addToCart(product.attributes.code) }>
+                      Add to cart
+                    </Button>
+                  ) : (
+                    <TextField
+                      inputProps={{ type: 'number'}}
+                      aria-label="number input"
+                      value={cart[product.attributes.code]}
+                      onChange={(event) => setProductQty(event, product.attributes.code)}
+                    />
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -59,8 +113,9 @@ ProductsTable.propTypes = {
           price: PropTypes.string.isRequired,
         }),
       }).isRequired,
-    )}
-  ).isRequired,
+    )
+  }).isRequired,
+  cart: PropTypes.shape()
 };
 
 export default ProductsTable;
