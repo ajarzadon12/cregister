@@ -14,9 +14,14 @@ import Paper from '@mui/material/Paper';
 import { v4 as uuidv4 } from 'uuid';
 
 const Cart = (props) => {
-  const { data: cart } = props.cart;
-
-  console.log(props.total);
+  const {
+    data: {
+      attributes: {
+        cart_products: cartProducts,
+        total_price: totalPrice
+      }
+    }
+  } = props.cart;
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
@@ -33,15 +38,15 @@ const Cart = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {cart.map((product) => (
+            {cartProducts.map((product) => (
               <TableRow key={uuidv4()}>
                 <TableCell component="th" scope="row">
-                  {product.attributes.code}
+                  {product.code}
                 </TableCell>
-                <TableCell>{product.attributes.name}</TableCell>
-                <TableCell>{product.attributes.unit_price}</TableCell>
-                <TableCell>{product.attributes.quantity}</TableCell>
-                <TableCell>{product.attributes.subtotal}</TableCell>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.unit_price}</TableCell>
+                <TableCell>{product.quantity}</TableCell>
+                <TableCell>{product.subtotal}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -49,27 +54,29 @@ const Cart = (props) => {
       </TableContainer>
       <Box sx={{ flexGrow: 1, justifyContent: 'flex-end', display: { xs: 'flex' }, mr: 10, mt: 2, gap: 2 }}>
         <Typography variant="h5" component="h5" gutterBottom>Total:</Typography>
-        <Typography variant="h5" component="h5" gutterBottom>{props.total}</Typography>
+        <Typography variant="h5" component="h5" gutterBottom>{totalPrice}</Typography>
       </Box>
     </Container>
   );
 };
 
 Cart.propTypes = {
-  products: PropTypes.shape({
+  cart: PropTypes.shape({
     data: PropTypes.arrayOf(
       PropTypes.shape({
         attributes: PropTypes.shape({
-          code: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          unit_price: PropTypes.number.isRequired,
-          quantity: PropTypes.number.isRequired,
-          subtotal: PropTypes.number.isRequired,
-        }),
-      }).isRequired,
+          products: PropTypes.shape({
+            code: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            unit_price: PropTypes.number.isRequired,
+            quantity: PropTypes.number.isRequired,
+            subtotal: PropTypes.number.isRequired,
+          }),
+          total_price: PropTypes.number.isRequired,
+        }).isRequired,
+      })
     )
   }).isRequired,
-  total: PropTypes.number.isRequired,
 };
 
 export default Cart;

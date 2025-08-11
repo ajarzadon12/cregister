@@ -8,6 +8,6 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Product.create(name: 'Green Tea', code: 'GR1', price_cents: 311)
-Product.create(name: 'Strawberries', code: 'SR1', price_cents: 500)
-Product.create(name: 'Coffee', code: 'CF1', price_cents: 1123)
+Product.create(name: 'Green Tea', code: 'GR1', price_cents: 311, pricing_option: 'B1G1')
+Product.create(name: 'Strawberries', code: 'SR1', price_cents: 500, pricing_option: 'DM3F450')
+Product.create(name: 'Coffee', code: 'CF1', price_cents: 1123, pricing_option: 'DM3P66')

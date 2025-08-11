@@ -52,7 +52,7 @@ const ProductsTable = (props) => {
   const setProductQty = (event, code) => {
     const quantity = event.target.value;
 
-    if (quantity > 1) {
+    if (quantity > cart[code]) {
       addToCart(code);
     } else {
       removeFromCart(code);

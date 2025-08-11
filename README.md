@@ -1,24 +1,18 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This app is developed using the following stack:
 
-Things you may want to cover:
+* Ruby 3.1.0
+* Rails 7.2.2
 
-* Ruby version
+## Getting Started
 
-* System dependencies
+- clone the repo
+- To initialize the database, run:
+  `rake db:init db:migrate db:seed`
 
-* Configuration
+## How to run the test suite
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- uses RSpec Rails
+- run the following command to run unit tests:
+  `rspec spec`
